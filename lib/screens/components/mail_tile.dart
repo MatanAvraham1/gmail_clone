@@ -1,9 +1,10 @@
 import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
 import 'package:gmail_clone/main.dart';
-
+import 'package:easy_localization/easy_localization.dart';
 import 'package:gmail_clone/models/mail.dart';
 import 'package:gmail_clone/screens/components/mail_screen.dart';
+import 'package:gmail_clone/translations/locale_keys.g.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:responsive_builder/responsive_builder.dart';
@@ -34,8 +35,9 @@ class _MailTileState extends State<MailTile> {
         closedBuilder: (context, action) => Dismissible(
           onDismissed: (direction) {
             ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-              content: Text("1 archived"),
-              action: SnackBarAction(label: "Cancel", onPressed: () {}),
+              content: Text("1 ${LocaleKeys.archived.tr()}"),
+              action: SnackBarAction(
+                  label: LocaleKeys.Cancel.tr(), onPressed: () {}),
             ));
           },
           key: UniqueKey(),
@@ -59,11 +61,15 @@ class _MailTileState extends State<MailTile> {
           child: ListTile(
             isThreeLine: true,
             title: Text(
-              widget.mail.title,
+              widget.mail.sender,
               maxLines: 1,
+              style: TextStyle(
+                  fontWeight: widget.mail.isOpend
+                      ? FontWeight.normal
+                      : FontWeight.bold),
             ),
             subtitle: Text(
-              widget.mail.content,
+              "${widget.mail.title}\n${widget.mail.content}",
               maxLines: 2,
             ),
             leading: CircleAvatar(
@@ -79,7 +85,11 @@ class _MailTileState extends State<MailTile> {
               children: [
                 Text(
                   "${widget.mail.sentAt.day} ${DateFormat.MMMM().format(widget.mail.sentAt).substring(0, 3)}",
-                  style: TextStyle(fontSize: 12),
+                  style: TextStyle(
+                      fontSize: 12,
+                      fontWeight: widget.mail.isOpend
+                          ? FontWeight.normal
+                          : FontWeight.bold),
                 ),
                 GestureDetector(
                   onTap: () {

@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:gmail_clone/constants/colors.dart';
 import 'package:gmail_clone/constants/themes.dart';
 import 'package:gmail_clone/main.dart';
+import 'package:gmail_clone/translations/locale_keys.g.dart';
 import 'package:responsive_builder/responsive_builder.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class SideMenu extends StatefulWidget {
   const SideMenu({Key? key}) : super(key: key);
@@ -47,10 +49,10 @@ class _SideMenuState extends State<SideMenu> {
                   deviceType == DeviceScreenType.desktop ? null : CloseButton(),
             ),
             Divider(),
-            _buildSideMenuTile("Inbox", Icons.inbox),
-            _buildSideMenuTile("Archive", Icons.archive),
-            _buildSideMenuTile("Starred", Icons.star),
-            _buildSideMenuTile("Trash", Icons.delete),
+            _buildSideMenuTile(LocaleKeys.Inbox.tr(), Icons.inbox),
+            _buildSideMenuTile(LocaleKeys.Archive.tr(), Icons.archive),
+            _buildSideMenuTile(LocaleKeys.Starred.tr(), Icons.star),
+            _buildSideMenuTile(LocaleKeys.Trash.tr(), Icons.delete),
             Divider(),
             SwitchListTile(
               value: _isDarkmode,
@@ -67,6 +69,16 @@ class _SideMenuState extends State<SideMenu> {
                 }
               },
             ),
+            TextButton(
+                onPressed: () {
+                  context.setLocale(Locale('en'));
+                },
+                child: Text("English")),
+            TextButton(
+                onPressed: () {
+                  context.setLocale(Locale('he'));
+                },
+                child: Text("עברית"))
           ],
         ),
       ),

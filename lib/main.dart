@@ -1,10 +1,26 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:gmail_clone/constants/themes.dart';
 import 'package:gmail_clone/models/mail.dart';
 import 'package:gmail_clone/screens/main_screen.dart';
+import 'package:gmail_clone/translations/codegen_loader.g.dart';
 
-void main() {
-  runApp(MyApp());
+// flutter pub run easy_localization:generate -S "assets/translations" -O "lib/translations"
+
+// flutter pub run easy_localization:generate -S "assets/translations" -O "lib/translations" -o "locale_keys.g.dart" -f keys
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  await EasyLocalization.ensureInitialized();
+
+  runApp(EasyLocalization(
+    supportedLocales: [Locale('en'), Locale('he')],
+    path: 'assets/translations',
+    fallbackLocale: Locale('en'),
+    assetLoader: CodegenLoader(),
+    child: MyApp(),
+  ));
 }
 
 class MyApp extends StatefulWidget {
@@ -35,6 +51,9 @@ class _MyAppState extends State<MyApp> {
       themeMode: _themeMode,
       theme: appThemeData[AppTheme.Light],
       darkTheme: appThemeData[AppTheme.Dark],
+      localizationsDelegates: context.localizationDelegates,
+      supportedLocales: context.supportedLocales,
+      locale: context.locale,
       home: MainScreen(),
     );
   }

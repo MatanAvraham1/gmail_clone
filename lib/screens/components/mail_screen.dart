@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:gmail_clone/main.dart';
 import 'package:gmail_clone/models/mail.dart';
+import 'package:easy_localization/easy_localization.dart';
+import 'package:gmail_clone/translations/locale_keys.g.dart';
 
 class MailScreen extends StatefulWidget {
   final Mail mail;
@@ -51,7 +53,9 @@ class _MailScreenState extends State<MailScreen> {
               child: GestureDetector(
                 child: Icon(
                   widget.mail.isStarred ? Icons.star : Icons.star_border,
-                  color: widget.mail.isStarred ? Colors.amber : Colors.black45,
+                  color: widget.mail.isStarred
+                      ? Colors.amber
+                      : Theme.of(context).iconTheme.color,
                 ),
                 onTap: () {
                   setState(() {
@@ -60,11 +64,11 @@ class _MailScreenState extends State<MailScreen> {
                 },
               ),
             ),
-            subtitle: Text("Inbox"),
+            subtitle: Text(LocaleKeys.Inbox.tr()),
           ),
           ListTile(
             title: Text(widget.mail.sender),
-            subtitle: Text("אל אני"),
+            subtitle: Text(LocaleKeys.to_me.tr()),
             trailing: Row(
               mainAxisSize: MainAxisSize.min,
               children: [

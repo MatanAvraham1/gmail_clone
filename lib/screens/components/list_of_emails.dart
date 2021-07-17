@@ -3,8 +3,10 @@ import 'package:gmail_clone/constants/colors.dart';
 import 'package:gmail_clone/constants/db.dart';
 import 'package:gmail_clone/screens/components/mail_tile.dart';
 import 'package:gmail_clone/screens/components/side_menu.dart';
+import 'package:gmail_clone/translations/locale_keys.g.dart';
 import 'package:material_floating_search_bar/material_floating_search_bar.dart';
 import 'package:responsive_builder/responsive_builder.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class ListOfEmails extends StatefulWidget {
   const ListOfEmails({Key? key}) : super(key: key);
@@ -18,17 +20,6 @@ class _ListOfEmailsState extends State<ListOfEmails> {
   Widget build(BuildContext context) {
     var deviceType = getDeviceType(MediaQuery.of(context).size);
 
-    // return Scaffold(
-    //   drawer: deviceType == DeviceScreenType.desktop ? null : SideMenu(),
-    //   appBar: AppBar(),
-    //   body: ListView.builder(
-    //     itemCount: mails.length,
-    //     itemBuilder: (context, index) => MailTile(
-    //       mail: mails[index],
-    //     ),
-    //   ),
-    // );
-
     return Scaffold(
       drawer: deviceType == DeviceScreenType.desktop ? null : SideMenu(),
       floatingActionButton: FloatingActionButton(
@@ -40,8 +31,8 @@ class _ListOfEmailsState extends State<ListOfEmails> {
         backgroundColor: Theme.of(context).canvasColor,
       ),
       body: FloatingSearchBar(
-        hint: 'Search...',
-        transition: CircularFloatingSearchBarTransition(),
+        hint: LocaleKeys.search_mail.tr(),
+        transition: ExpandingFloatingSearchBarTransition(),
         actions: [
           FloatingSearchBarAction(
             child: CircleAvatar(
@@ -67,10 +58,23 @@ class _ListOfEmailsState extends State<ListOfEmails> {
         ],
         body: Padding(
           padding: const EdgeInsets.only(top: 55),
-          child: ListView.builder(
-            itemCount: mails.length,
-            itemBuilder: (context, index) => MailTile(
-              mail: mails[index],
+          child: FloatingSearchBarScrollNotifier(
+            child: ListView.builder(
+              itemCount: mails.length + 1,
+              itemBuilder: (context, index) => index == 0
+                  ? Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 17, vertical: 8),
+                      child: Text(
+                        LocaleKeys.Inbox.tr(),
+                        style: TextStyle(
+                          color: Theme.of(context).iconTheme.color,
+                        ),
+                      ),
+                    )
+                  : MailTile(
+                      mail: mails[index - 1],
+                    ),
             ),
           ),
         ),
